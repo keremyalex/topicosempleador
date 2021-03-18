@@ -21,12 +21,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final pushProvider = new PushNotificationsProvider();
-  //   pushProvider.initNotifications();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    final pushProvider = new PushNotificationsProvider();
+    pushProvider.initNotifications();
+  }
 
   @override
   Widget build(BuildContext context) {
