@@ -1,5 +1,4 @@
 import 'package:empleador_app/pages/register/components/body.dart';
-import 'package:empleador_app/pages/register/components/body2.dart';
 import 'package:flutter/material.dart';
 
 
@@ -9,7 +8,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  PageController _pageController = new PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,13 +20,15 @@ class _RegisterPageState extends State<RegisterPage> {
             color: Colors.black,
           ),
         ),
-        body: PageView(
-          controller: _pageController,
-          //physics: NeverScrollableScrollPhysics(), //disable scroll
-          children: [            
-            Body(pageController: _pageController,), 
-            Body2()
-          ],
-        ));
+        // body: PageView(
+        //   controller: _pageController,
+        //   //physics: NeverScrollableScrollPhysics(), //disable scroll
+        //   children: [            
+        //     Body(pageController: _pageController,), 
+        //     Body2()
+        //   ],
+        // )
+        body: Body(),
+        );
   }
 }

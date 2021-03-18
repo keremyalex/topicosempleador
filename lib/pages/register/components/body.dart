@@ -1,22 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:empleador_app/constants.dart';
+import 'package:empleador_app/pages/components/build_form_email.dart';
 import 'package:empleador_app/pages/components/build_form_number.dart';
+import 'package:empleador_app/pages/components/build_form_password.dart';
 import 'package:empleador_app/pages/components/build_form_text.dart';
+import 'package:empleador_app/pages/components/custom_surfix_icon.dart';
 import 'package:empleador_app/pages/components/default_button.dart';
 import 'package:empleador_app/pages/components/mostrar_alerta.dart';
+import 'package:empleador_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatefulWidget {
   const Body({
     Key key,
-    @required this.pageController,
   }) : super(key: key);
-  final PageController pageController;
 
   @override
   _BodyState createState() => _BodyState();
@@ -78,6 +81,8 @@ class _BodyState extends State<Body> {
   final nameCtrl = new TextEditingController();
   final apellidoCtrl = new TextEditingController();
   final telephoneCtrl = new TextEditingController();
+  final emailCtrl = new TextEditingController();
+  final passwordCtrl = new TextEditingController();
   String name;
   String apellido;
   String telephone;
@@ -134,7 +139,7 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    //final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthService>(context);
     return SafeArea(
         child: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -223,7 +228,7 @@ class _BodyState extends State<Body> {
                 },
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               BuildFormText(
                 controller: apellidoCtrl,
@@ -240,7 +245,7 @@ class _BodyState extends State<Body> {
                 },
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
 
               InputDecorator(
@@ -282,7 +287,7 @@ class _BodyState extends State<Body> {
                   )),
 
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               BuildFormNumber(
                 controller: telephoneCtrl,
@@ -299,7 +304,7 @@ class _BodyState extends State<Body> {
                 },
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
 
               InputDecorator(
@@ -345,7 +350,7 @@ class _BodyState extends State<Body> {
                 },
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               InputDecorator(
                 decoration: InputDecoration(
@@ -369,6 +374,24 @@ class _BodyState extends State<Body> {
                         });
                       }),
                 ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              BuildFormEmail(
+                controller: emailCtrl,
+                labelText: 'Email',
+                hintText: 'Ingrese su correo',
+                icono: CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              BuildFormPassword(
+                controller: passwordCtrl,
+                labelText: 'Password',
+                hintText: 'Ingrese su contraseña',
+                icono: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
               ),
               SizedBox(
                 height: 30,
@@ -413,9 +436,29 @@ class _BodyState extends State<Body> {
                           key: 'departamento', value: departamento);
 
                       print('Guardando Datos Temporales');
-                      widget.pageController.animateToPage(1,
-                          duration: Duration(milliseconds: 250),
-                          curve: Curves.bounceInOut);
+
+                      final registroOk = await authService.register(
+                          getNombre,
+                          getApellido,
+                          getFecha,
+                          getTelefono,
+                          getGenero,
+                          getCI,
+                          getDepartamento,
+                          emailCtrl.text,
+                          passwordCtrl.text,
+                          base64Image,
+                          fileName);
+                      print('Resgistro es: $registroOk');
+                      if (registroOk) {
+                        // mostrarAlerta(context, 'Registro',
+                        //     'Usuario Registrado Satisfactoriamente');
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'home', (route) => false);
+                      } else {
+                        mostrarAlerta(context, 'Login y Registro incorrecto',
+                            'Revise sus credenciales nuevamente');
+                      }
                     } else {
                       //agregar el else if, si estan los datos en el storage getNombre, getApellido, etc
                       mostrarAlerta(context, 'Faltan Datos',

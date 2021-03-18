@@ -10,6 +10,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0))),
+            title: Text('¿Estás seguro?'),
+            content: Text('Vas a cerrar sesión de la aplicación!!'),
+            actions: <Widget>[
+              MaterialButton(
+                child: Text('NO'),
+                elevation: 5,
+                color: kPrimaryColor,
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              MaterialButton(
+                child: Text('SI'),
+                elevation: 5,
+                color: kPrimaryColor,
+                onPressed: () {
+                  //AuthService.logout();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, 'login', (route) => false);
+                },
+              ),
+              SizedBox(
+                width: 5,
+              )
+            ],
+          );
+        });
+  }
+
   int _selectDrawerItem = 0;
   _getDrawerItemWidget(int pos) {
     switch (pos) {
@@ -48,14 +84,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              color: _selectDrawerItem==0?kPrimaryColor:Colors.white,
+              color: _selectDrawerItem == 0 ? kPrimaryColor : Colors.white,
               child: CustomListTile(Icons.home, 'Home', () {
                 _onSelectedItem(0);
                 Navigator.of(context).pop();
               }),
             ),
             Container(
-              color: _selectDrawerItem==1?kPrimaryColor:Colors.white,
+              color: _selectDrawerItem == 1 ? kPrimaryColor : Colors.white,
               child: CustomListTile(Icons.person, 'Perfil', () {
                 _onSelectedItem(1);
                 Navigator.of(context).pop();
@@ -63,7 +99,10 @@ class _HomePageState extends State<HomePage> {
             ),
             CustomListTile(Icons.work, 'Mis Servicios', () {}),
             CustomListTile(Icons.settings, 'Configuración', () {}),
-            CustomListTile(Icons.lock, 'Cerrar Sesión', () {}),
+            CustomListTile(Icons.lock, 'Cerrar Sesión', () {
+              print('cerrar');
+              _onBackPressed();
+            }),
           ],
         ),
       ),

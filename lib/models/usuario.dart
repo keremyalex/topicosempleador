@@ -1,4 +1,4 @@
-// To parse this JSON data, do
+// // To parse this JSON data, do
 //
 //     final usuario = usuarioFromJson(jsonString);
 
@@ -9,69 +9,57 @@ Usuario usuarioFromJson(String str) => Usuario.fromJson(json.decode(str));
 String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
-  Usuario({
-    this.id,
-    this.name,
-    this.lastname,
-    this.fecha,
-    this.telephone,
-    this.genero,
-    this.ci,
-    this.departamento,
-    this.area,
-    this.trabajo,
-    this.dias,
-    this.horario,
-    this.email,
-    this.profilePhoto,
-  });
+    Usuario({
+        this.id,
+        this.photo,
+        this.nombre,
+        this.apellido,
+        this.email,
+        this.fechaNacimiento,
+        this.genero,
+        this.contato,
+        this.departamento,
+        this.mensaje,
+        this.login,
+    });
 
-  int id;
-  String name;
-  String lastname;
-  String fecha;
-  int telephone;
-  String genero;
-  int ci;
-  String departamento;
-  String area;
-  String trabajo;
-  String dias;
-  String horario;
-  String email;
-  String profilePhoto;
+    int id;
+    String photo;
+    String nombre;
+    String apellido;
+    String email;
+    String fechaNacimiento;
+    String genero;
+    String contato;
+    String departamento;
+    String mensaje;
+    String login;
 
-  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
+    factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         id: json["id"],
-        name: json["name"],
-        lastname: json["lastname"],
-        fecha: json["fecha"],
-        telephone: json["telephone"],
-        genero: json["genero"],
-        ci: json["ci"],
-        departamento: json["departamento"],
-        area: json["area"],
-        trabajo: json["trabajo"],
-        dias: json["dias"],
-        horario: json["horario"],
+        photo: json["photo"],
+        nombre: json["nombre"],
+        apellido: json["apellido"],
         email: json["email"],
-        profilePhoto: json["profile_photo"],
-      );
+        fechaNacimiento: json["fechaNacimiento"],
+        genero: json["genero"],
+        contato: json["contato"],
+        departamento: json["departamento"],
+        mensaje: json["mensaje"],
+        login: json["login"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name,
-        "lastname": lastname,
-        "fecha": fecha,
-        "telephone": telephone,
-        "genero": genero,
-        "ci": ci,
-        "departamento": departamento,
-        "area": area,
-        "trabajo": trabajo,
-        "dias": dias,
-        "horario": horario,
+        "photo": photo,
+        "nombre": nombre,
+        "apellido": apellido,
         "email": email,
-        "profile_photo": profilePhoto,
-      };
+        "fechaNacimiento": fechaNacimiento,
+        "genero": genero,
+        "contato": contato,
+        "departamento": departamento,
+        "mensaje": mensaje,
+        "login": login,
+    };
 }

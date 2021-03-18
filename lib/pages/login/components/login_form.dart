@@ -3,7 +3,9 @@ import 'package:empleador_app/pages/components/build_form_email.dart';
 import 'package:empleador_app/pages/components/build_form_password.dart';
 import 'package:empleador_app/pages/components/custom_surfix_icon.dart';
 import 'package:empleador_app/pages/components/default_button.dart';
+import 'package:empleador_app/pages/components/mostrar_alerta.dart';
 import 'package:empleador_app/pages/components/social_card.dart';
+import 'package:empleador_app/services/auth_service.dart';
 import 'package:empleador_app/services/trabajador_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -105,11 +107,23 @@ class _LoginFormState extends State<LoginForm> with RelativeScale {
                       Provider.of<TrabajadorService>(context, listen: false);
                   final trabajadorOk = await trabajadorService.getTrabajadores();
 
-                  //Ruta para probar el login sin datos
-                  if(trabajadorOk){
-                    Navigator.pushNamedAndRemoveUntil(
-                      context, 'home', (route) => false);
+                  final authService =
+                Provider.of<AuthService>(context, listen: false);
+
+
+                   final loginOk = await authService.login(
+                      emailCtrl.text.trim(), passwordCtrl.text.trim());
+                  if (trabajadorOk && loginOk) {
+                    Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+                  } else {
+                    mostrarAlerta(context, 'Estado del Login', 'Error al ingresar');
                   }
+
+                  // //Ruta para probar el login sin datos
+                  // if(trabajadorOk){
+                  //   Navigator.pushNamedAndRemoveUntil(
+                  //     context, 'home', (route) => false);
+                  // }
                   
 
                   // //Los datos son validos de los forms

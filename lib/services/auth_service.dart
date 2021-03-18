@@ -28,14 +28,22 @@ class AuthService with ChangeNotifier {
   Future<bool> login(String email, String password) async {
     this.autenticando = true;
 
-    final data = {'email': email, 'password': password};
+    final tokenPush = await _storage.read(key: 'tokenPush');
+    final tipoUser = 'empleador';
 
-    final resp = await http.post(DotEnv().env['API_LOGIN'],
-        body: data);
+    final data = {
+      'email': email,
+      'password': password,
+      'token': tokenPush,
+      'tipoUser': tipoUser
+    };
+
+    final resp = await http.post(DotEnv().env['API_LOGIN'], body: data);
 
     this.autenticando = false;
     if (resp.statusCode == 200) {
       print('Conexión Exitosa Login');
+      print(resp.body);
       final loginResponse = loginResponseFromJson(resp.body);
       this.usuario = loginResponse.usuario;
       //await this._guardarIdUser(loginResponse.usuario.id.toString());
@@ -54,15 +62,11 @@ class AuthService with ChangeNotifier {
       String genero,
       String ci,
       String depart,
-      String idSubArea,
-      String precio,
-      String nota,
-      String dias,
-      String horario,
       String email,
       String password,
       String image,
       String filename) async {
+    final tokenPush = await _storage.read(key: 'tokenPush');
     final data = {
       'image': image,
       'filename': filename,
@@ -73,18 +77,13 @@ class AuthService with ChangeNotifier {
       'genero': genero,
       'ci': ci,
       'departamento': depart,
-      'idSubArea': idSubArea,
-      'precioEstandar': precio,
-      'notaServicio': nota,
-      'dias': dias,
-      'horario': horario,
+      'token': tokenPush,
       'email': email,
       'password': password
     };
     //falta el area de trabajo
 
-    final resp =
-        await http.post(DotEnv().env['API_REGISTER'], body: data);
+    final resp = await http.post(DotEnv().env['API_REGISTER'], body: data);
     print(data['name']);
     print(resp.body);
     if (resp.statusCode == 200) {
@@ -100,7 +99,6 @@ class AuthService with ChangeNotifier {
       await _storage.delete(key: 'genero');
       await _storage.delete(key: 'ci');
       await _storage.delete(key: 'departamento');
-
 
       return true;
       //return await login(email, password);

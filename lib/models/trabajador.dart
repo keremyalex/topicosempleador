@@ -1,3 +1,9 @@
+// 
+
+// To parse this JSON data, do
+//
+//     final trabajador = trabajadorFromJson(jsonString);
+
 import 'dart:convert';
 
 Trabajador trabajadorFromJson(String str) => Trabajador.fromJson(json.decode(str));
@@ -15,6 +21,7 @@ class Trabajador {
         this.nombreTrabajador,
         this.apellidoTrabajador,
         this.departamento,
+        this.idServicio,
         this.listaServicio,
     });
 
@@ -27,6 +34,7 @@ class Trabajador {
     String nombreTrabajador;
     String apellidoTrabajador;
     String departamento;
+    int idServicio;
     bool listaServicio;
 
     factory Trabajador.fromJson(Map<String, dynamic> json) => Trabajador(
@@ -39,6 +47,7 @@ class Trabajador {
         nombreTrabajador: json["nombreTrabajador"],
         apellidoTrabajador: json["apellidoTrabajador"],
         departamento: json["departamento"],
+        idServicio: json["idServicio"],
         listaServicio: json["listaServicio"],
     );
 
@@ -52,6 +61,7 @@ class Trabajador {
         "nombreTrabajador": nombreTrabajador,
         "apellidoTrabajador": apellidoTrabajador,
         "departamento": departamento,
+        "idServicio": idServicio,
         "listaServicio": listaServicio,
     };
 }
