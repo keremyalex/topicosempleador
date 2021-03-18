@@ -2,6 +2,7 @@ import 'package:empleador_app/routes/routes.dart';
 import 'package:empleador_app/services/area_service.dart';
 import 'package:empleador_app/services/auth_service.dart';
 import 'package:empleador_app/services/push_notifications_provider.dart';
+import 'package:empleador_app/services/trabajador_service.dart';
 import 'package:empleador_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,7 +33,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
-        ChangeNotifierProvider(create: (_) => AreaService())
+        ChangeNotifierProvider(create: (_) => AreaService()),
+        ChangeNotifierProvider(create: (_) => TrabajadorService())
       ],
       child: MaterialApp(
         localizationsDelegates: [

@@ -4,10 +4,10 @@ import 'package:empleador_app/pages/components/build_form_password.dart';
 import 'package:empleador_app/pages/components/custom_surfix_icon.dart';
 import 'package:empleador_app/pages/components/default_button.dart';
 import 'package:empleador_app/pages/components/social_card.dart';
+import 'package:empleador_app/services/trabajador_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:relative_scale/relative_scale.dart';
-
 
 class LoginForm extends StatefulWidget {
   @override
@@ -38,8 +38,7 @@ class _LoginFormState extends State<LoginForm> with RelativeScale {
                 style: TextStyle(
                     fontSize: sy(28),
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Muli'
-                ),
+                    fontFamily: 'Muli'),
               ),
               Text(
                 "Inicie sesión con su correo y contraseña  \no continue con las redes sociales",
@@ -101,9 +100,17 @@ class _LoginFormState extends State<LoginForm> with RelativeScale {
                 press: () async {
                   print(emailCtrl.text);
                   print(passwordCtrl.text);
-                  
+
+                  final trabajadorService =
+                      Provider.of<TrabajadorService>(context, listen: false);
+                  final trabajadorOk = await trabajadorService.getTrabajadores();
+
                   //Ruta para probar el login sin datos
-                  Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+                  if(trabajadorOk){
+                    Navigator.pushNamedAndRemoveUntil(
+                      context, 'home', (route) => false);
+                  }
+                  
 
                   // //Los datos son validos de los forms
                   // if (_formKey.currentState.validate()) {

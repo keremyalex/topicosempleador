@@ -7,7 +7,7 @@ mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text(titulo),
+      title: Text(titulo, style: TextStyle(fontWeight: FontWeight.bold),),
       content: Text(subtitulo),
       actions: <Widget>[
         MaterialButton(
