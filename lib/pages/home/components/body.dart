@@ -1,7 +1,8 @@
 import 'package:empleador_app/constants.dart';
 import 'package:empleador_app/models/trabajador.dart';
 import 'package:empleador_app/pages/components/custom_alert.dart';
-import 'package:empleador_app/pages/components/mostrar_alerta.dart';
+import 'package:empleador_app/services/auth_service.dart';
+import 'package:empleador_app/services/solicitud_service.dart';
 import 'package:empleador_app/services/trabajador_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +18,16 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     final trabajadorService = Provider.of<TrabajadorService>(context);
-    if(mySeachController.text==''){
+    final solicitudService = Provider.of<SolicitudService>(context);
+
+    final authService = Provider.of<AuthService>(context);
+    final usuario = authService.usuario;
+
+    if (mySeachController.text == '') {
       final trabajadores = trabajadorService.trabajadores;
-    setState(() {
-      trabajador = trabajadores;
-    });
+      setState(() {
+        trabajador = trabajadores;
+      });
     }
     return Container(
       color: Colors.grey[100],
@@ -41,7 +47,8 @@ class _BodyState extends State<Body> {
                         onTap: () {
                           print('buscar');
                           List<Trabajador> temp = trabajador
-                              .where((e) => e.nombreServicio == mySeachController.text)
+                              .where((e) =>
+                                  e.nombreServicio == mySeachController.text)
                               .toList();
                           setState(() {
                             trabajador = temp;
@@ -67,71 +74,88 @@ class _BodyState extends State<Body> {
           ),
           Expanded(
             child: (trabajador.length == 0)
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        'No hay resultados..',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                    ) 
-            :ListView.separated(
-              scrollDirection: Axis.vertical,
-              itemCount: trabajador.length,
-              itemBuilder: (context, index) =>
-                  // ListTile(
-                  //   title: Text('holas'),
-                  // ),
-                  Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Card(
-                  color: Colors.white,
-                  elevation: 6,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () {
-                      print(trabajador[index].nombreTrabajador);
-                      customAlert(context, trabajador[index].nombreServicio,
-                          '¿Está seguro de la solicitud?');
-                    },
-                    child: Row(
-                      children: [
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Text(
+                      'No hay resultados..',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    itemCount: trabajador.length,
+                    itemBuilder: (context, index) =>
+                        // ListTile(
+                        //   title: Text('holas'),
+                        // ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundImage:
-                                AssetImage('assets/images/avatar.png'),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        clipBehavior: Clip.antiAlias,
+                        child: InkWell(
+                          onTap: () {
+                            print(trabajador[index].nombreTrabajador);
+                            customAlert(
+                                context,
+                                trabajador[index].nombreServicio,
+                                '¿Está seguro de la solicitud?', () async {
+                              final solicitudOk =
+                                  await solicitudService.crearSolicitud(
+                                      'latitud',
+                                      'longitud',
+                                      'fechaSolicitud',
+                                      'horaSolicitud',
+                                      '${trabajador[index].idServicio}',
+                                      '${usuario.id}');
+                              if (solicitudOk) {
+                                Navigator.of(context).pop();
+                              }
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage:
+                                      AssetImage('assets/images/avatar.png'),
+                                ),
+                              ),
+                              Column(
+                                //mainAxisAlignment: MainAxisAlignment.,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(trabajador[index].nombreServicio,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Text(
+                                      'Nombre: ${trabajador[index].nombreTrabajador} ${trabajador[index].apellidoTrabajador}'),
+                                  //Text(trabajador[index].apellidoTrabajador),
+                                  Text(
+                                      'Descripción: ${trabajador[index].nota}'),
+                                  Text('Días: ${trabajador[index].dias}'),
+                                  Text('Disponible: ${trabajador[index].hora}'),
+                                  Text(
+                                      'Precio Estandar: ${trabajador[index].precioEstandar}'),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        Column(
-                          //mainAxisAlignment: MainAxisAlignment.,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(trabajador[index].nombreServicio,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
-                            Text(
-                                'Nombre: ${trabajador[index].nombreTrabajador} ${trabajador[index].apellidoTrabajador}'),
-                            //Text(trabajador[index].apellidoTrabajador),
-                            Text('Descripción: ${trabajador[index].nota}'),
-                            Text('Días: ${trabajador[index].dias}'),
-                            Text('Disponible: ${trabajador[index].hora}'),
-                            Text(
-                                'Precio Estandar: ${trabajador[index].precioEstandar}'),
-                          ],
-                        ),
-                      ],
+                      ),
+                    ),
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 10,
                     ),
                   ),
-                ),
-              ),
-              separatorBuilder: (context, index) => SizedBox(
-                height: 10,
-              ),
-            ),
           ),
         ],
       ),

@@ -38,6 +38,8 @@ class AuthService with ChangeNotifier {
       'tipoUser': tipoUser
     };
 
+    print(data);
+
     final resp = await http.post(DotEnv().env['API_LOGIN'], body: data);
 
     this.autenticando = false;
@@ -46,8 +48,11 @@ class AuthService with ChangeNotifier {
       print(resp.body);
       final loginResponse = loginResponseFromJson(resp.body);
       this.usuario = loginResponse.usuario;
-      //await this._guardarIdUser(loginResponse.usuario.id.toString());
-      return true;
+      if (this.usuario.id != null)
+        //await this._guardarIdUser(loginResponse.usuario.id.toString());
+        return true;
+      else
+        return false;
     } else {
       print('Error en la conexión login');
       return false;

@@ -2,6 +2,7 @@ import 'package:empleador_app/routes/routes.dart';
 import 'package:empleador_app/services/area_service.dart';
 import 'package:empleador_app/services/auth_service.dart';
 import 'package:empleador_app/services/push_notifications_provider.dart';
+import 'package:empleador_app/services/solicitud_service.dart';
 import 'package:empleador_app/services/trabajador_service.dart';
 import 'package:empleador_app/theme.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => AreaService()),
-        ChangeNotifierProvider(create: (_) => TrabajadorService())
+        ChangeNotifierProvider(create: (_) => TrabajadorService()),
+        ChangeNotifierProvider(create: (_) => SolicitudService())
       ],
       child: MaterialApp(
         localizationsDelegates: [

@@ -2,7 +2,8 @@ import 'package:empleador_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-customAlert(BuildContext context, String titulo, String subtitulo) {
+customAlert(
+    BuildContext context, String titulo, String subtitulo, Function ontap) {
   showDialog(
     context: context,
     builder: (_) => AlertDialog(
@@ -65,10 +66,7 @@ customAlert(BuildContext context, String titulo, String subtitulo) {
 
             // dialog bottom
             InkWell(
-              onTap: () {
-                print('trabajo solicitado');
-                Navigator.pop(context);
-              },
+              onTap: ontap,
               child: Container(
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(

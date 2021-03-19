@@ -1,8 +1,10 @@
 import 'package:empleador_app/constants.dart';
 import 'package:empleador_app/pages/home/components/body.dart';
+import 'package:empleador_app/services/auth_service.dart';
 import 'package:empleador_app/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:empleador_app/pages/perfil/perfil_page.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -64,6 +66,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final usuario = authService.usuario;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -75,12 +79,12 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Flutter Test"),
-              accountEmail: Text("test@test.com"),
+              accountName: Text('${usuario.nombre} ${usuario.apellido}'),
+              accountEmail: Text(usuario.email),
               decoration: BoxDecoration(gradient: kPrimaryGradientColor),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.orangeAccent,
-                child: Text('F'),
+                child: Text('${usuario.nombre[0]}'),
               ),
             ),
             Container(

@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
   // ignore: must_call_super
   void initState() {
     //super.initState();
-    traerDatos();
+    //traerDatos();
   }
 
   //Controladores de los TextFormField
@@ -274,6 +274,7 @@ class _BodyState extends State<Body> {
                             DateFormat formatter = new DateFormat('yyyy-MM-dd');
                             formattedDate = formatter.format(_dateTime);
                             fecha = formattedDate;
+                            getFecha = fecha;
                           });
                         }
                       });
@@ -328,6 +329,7 @@ class _BodyState extends State<Body> {
                         setState(() {
                           currentSelectedValue = val;
                           genero = currentSelectedValue;
+                          getGenero = genero;
                         });
                       }),
                 ),
@@ -371,6 +373,7 @@ class _BodyState extends State<Body> {
                         setState(() {
                           departSelectedValue = val;
                           departamento = departSelectedValue;
+                          getDepartamento = departamento;
                         });
                       }),
                 ),
@@ -419,31 +422,31 @@ class _BodyState extends State<Body> {
                           base64Encode(_image.readAsBytesSync());
                       String fileName = _image.path.split("/").last;
 
-                      await _storage.write(
-                          key: 'base64Image', value: base64Image);
-                      await _storage.write(key: 'filename', value: fileName);
-                      await _storage.write(
-                          key: 'nombre', value: nameCtrl.text.trim());
-                      await _storage.write(
-                          key: 'apellido', value: apellidoCtrl.text.trim());
-                      await _storage.write(key: 'fecha', value: fecha.trim());
-                      await _storage.write(
-                          key: 'telefono', value: telephoneCtrl.text.trim());
-                      await _storage.write(key: 'genero', value: genero);
-                      await _storage.write(
-                          key: 'ci', value: ciCtrl.text.trim());
-                      await _storage.write(
-                          key: 'departamento', value: departamento);
+                      // await _storage.write(
+                      //     key: 'base64Image', value: base64Image);
+                      // await _storage.write(key: 'filename', value: fileName);
+                      // await _storage.write(
+                      //     key: 'nombre', value: nameCtrl.text.trim());
+                      // await _storage.write(
+                      //     key: 'apellido', value: apellidoCtrl.text.trim());
+                      // await _storage.write(key: 'fecha', value: fecha.trim());
+                      // await _storage.write(
+                      //     key: 'telefono', value: telephoneCtrl.text.trim());
+                      // await _storage.write(key: 'genero', value: genero);
+                      // await _storage.write(
+                      //     key: 'ci', value: ciCtrl.text.trim());
+                      // await _storage.write(
+                      //     key: 'departamento', value: departamento);
 
-                      print('Guardando Datos Temporales');
+                      // print('Guardando Datos Temporales');
 
                       final registroOk = await authService.register(
-                          getNombre,
-                          getApellido,
+                          nameCtrl.text,
+                          apellidoCtrl.text,
                           getFecha,
-                          getTelefono,
+                          telephoneCtrl.text,
                           getGenero,
-                          getCI,
+                          ciCtrl.text,
                           getDepartamento,
                           emailCtrl.text,
                           passwordCtrl.text,
